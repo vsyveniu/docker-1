@@ -1,1 +1,2 @@
-docker-machine ls | awk '/Char/ {print $5}'
+#docker-machine ls | awk '/Char/ {print $5}'
+docker-machine ip Char
