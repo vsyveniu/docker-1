@@ -1,0 +1,2 @@
+docker swarm join --token SWMTKN-1-690e7myfrfcku22xl8c9pchxarjx7fh85ohc7lsju1lbmol382-3afx69cp7igoxsq8og9i9705q 192.168.99.100:2377
+#this command shoud run in a second terminal with already evaled environment variables of slave machine

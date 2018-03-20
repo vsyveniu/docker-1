@@ -1,0 +1,3 @@
+docker run --name Abathur --mount source=/home,target=~/Abathur/root/ -d -i python:2-slim
+
+need to do it properly
