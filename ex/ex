@@ -1,0 +1,108 @@
+01
+
+FROM debian
+
+RUN apt-get update -y && apt-get upgrade -y
+RUN apt-get install curl -y
+RUN apt-get install bzip2 -y
+
+# CONFIG TEAMSPEAK
+
+#PORT 
+EXPOSE 9987/udp
+EXPOSE 30033
+EXPOSE 10011
+EXPOSE 41144
+
+RUN useradd ts3
+WORKDIR /home/t3
+
+RUN curl http://dl.4players.de/ts/releases/3.0.13.6/teamspeak3-server_linux_amd64-3.0.13.6.tar.bz2 > teamspeak-server.tar.bz2 
+RUN tar -xjvf teamspeak-server.tar.bz2
+WORKDIR teamspeak3-server_linux_amd64
+COPY ts3server.ini /home/t3/teamspeak3-server_linux_amd64/ts3server.ini
+USER ts3
+ENTRYPOINT ["sh","ts3server_minimal_runscript.sh", "inifile=ts3server.ini"]
+
+t3server.ini
+
+machine_id=
+default_voice_port=9987
+voice_ip=0.0.0.0
+licensepath=
+filetransfer_port=30033
+filetransfer_ip=0.0.0.0
+query_port=10011
+query_ip=0.0.0.0
+query_ip_whitelist=query_ip_whitelist.txt
+query_ip_blacklist=query_ip_blacklist.txt
+dbplugin=ts3db_sqlite3
+dbpluginparameter=
+dbsqlpath=sql/
+dbsqlcreatepath=create_sqlite/
+dblogkeepdays=90
+logpath=logs
+logquerycommands=0
+dbclientkeepdays=30
+
+
+
+02
+
+
+FROM ruby
+
+RUN apt-get update -y && apt-get upgrade -y
+RUN gem install rails
+RUN apt-get install nodejs -y
+
+ONBUILD COPY . /opt/app
+
+ONBUILD WORKDIR /opt/app
+
+ONBUILD RUN bundle install
+ONBUILD RUN rails db:migrate
+ONBUILD RUN rails db:seed
+
+
+
+03
+
+FROM debian
+
+RUN apt-get update -y && apt-get upgrade -y
+
+#DEPENDENCIES
+RUN apt-get install git -y
+RUN apt-get install wget -y
+RUN apt-get install gcc -y
+
+# INSTALL GO
+WORKDIR $HOME/local
+RUN wget https://storage.googleapis.com/golang/go1.8.linux-amd64.tar.gz
+RUN tar -xzvf go1.8.linux-amd64.tar.gz
+
+ENV GOROOT=$HOME/local/go
+ENV GOPATH=$HOME/gogs
+ENV PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+
+WORKDIR $GOPATH/src/github.com/gogits
+
+#DOWNLOAD GOGS FROM DEVELOP BRANCH
+RUN git clone --depth=1 -b develop https://github.com/gogits/gogs
+RUN go get -u -tags "sqlite" github.com/gogits/gogs
+WORKDIR $GOPATH/src/github.com/gogits/gogs
+RUN go build -tags "sqlite"
+
+# CREATE DIRECTORIES
+RUN mkdir $GOPATH/src/github.com/gogits/logs
+RUN mkdir /root/gogs-repositories
+RUN mkdir /root/data
+
+# START
+EXPOSE 3000
+
+#USER root
+ENV USER=root
+
+ENTRYPOINT ./gogs web
