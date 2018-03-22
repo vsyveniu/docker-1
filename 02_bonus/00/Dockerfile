@@ -1,13 +1,4 @@
-FROM node:carbon
+FROM debian:latest
 
-WORKDIR /app
-
-COPY package*.json ./
-
-RUN yarn install
-
-COPY /Users/vsyveniu/projects/nodetest
-
-EXPOSE 8080
-
-CMD[ "node", "server.js" ]
+RUN apt-get -y update && \
+	apt-get -y install valgrind
