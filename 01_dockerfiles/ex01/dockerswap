@@ -13,3 +13,4 @@ EXPOSE 41144
 //RUN cd /home/teamspeak
 
 
+RUN ./ts3server_startscript.sh start
