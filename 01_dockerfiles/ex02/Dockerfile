@@ -9,6 +9,9 @@ RUN apt-get update && \
 			
 ONBUILD COPY ./myapp/ /opt/app
 
+ONBUILD WORKDIR /opt/app
+
+ONBUILD RUN bundle install
 ONBUILD RUN rake db:migrate
 ONBUILD RUN rake db:populate
  
