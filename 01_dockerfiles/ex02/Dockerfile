@@ -1,21 +1,6 @@
-FROM  ruby:latest
+FROM ft-rails
 
-RUN apt-get update && \
-	apt-get -y upgrade && \
-	apt-get -y install ruby-full && \
-	apt-get -y autoclean && \
-	gem install rails
+CMD ["rails", "s", "-b", "0.0.0.0"]
 
-			
-ONBUILD COPY ./myapp/ /opt/app
-
-ONBUILD WORKDIR /opt/app
-
-ONBUILD RUN bundle install
-ONBUILD RUN rake db:migrate
-ONBUILD RUN rake db:setup
-ONBUILD RUN rake db:seed 
-
-EXPOSE 3000 
-
-ENTRYPOINT ["bash"]
+#to run docker run --rm --name=<some name> -p 3000:3000 -i -t <image id>
+#192.168.99.100 to access

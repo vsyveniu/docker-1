@@ -1,0 +1,23 @@
+FROM  ruby:latest	
+
+RUN apt-get update && \
+	apt-get -y upgrade && \
+	apt-get -y install ruby-full && \
+	apt-get -y install nodejs && \
+	apt-get -y autoclean && \
+	gem install rails
+
+			
+ONBUILD COPY ./myapp/ /opt/app
+
+ONBUILD WORKDIR /opt/app
+
+ONBUILD RUN bundle install
+ONBUILD RUN rake db:migrate
+ONBUILD RUN rake db:setup
+ONBUILD RUN rake db:seed 
+
+EXPOSE 3000 
+
+
+#to build ft-rails docker build -t ft-rails  -f /Users/vsyveniu/projects/docker-1/docker-1/01_dockerfiles/ex02/ft-rails .
