@@ -1,2 +1,1 @@
 docker pull hello-world
-#get an image from repository without starting it

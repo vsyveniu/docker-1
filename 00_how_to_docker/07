@@ -1,2 +1,1 @@
-#docker inspect overlord | awk '/IPAdress/ {print $2}'
 docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' overlord

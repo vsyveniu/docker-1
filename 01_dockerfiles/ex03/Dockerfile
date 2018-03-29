@@ -25,6 +25,5 @@ EXPOSE 22
 
 CMD ["./gogs", "web"]
 
-#docker run --name=<name of container> -e MYSQL_ROOT_PASSWORD=<root> -d mysql
 #docker run --name=gogs -p 3000:3000 -p 3022:22 -d <image id>
 #need to set a domain 192.168.99.100 and change user to root

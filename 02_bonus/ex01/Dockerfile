@@ -19,6 +19,6 @@ COPY ./testapp /testapp
 
 CMD ["sh", "/boots.sh"]
 
-#to run a container: docker run --name=fuck -p 5900:5900 -e VNC_SERVER_PASSWORD=root --user swag --privileged -d
+#to run a container: docker run --name=<name> -p 5900:5900 -e VNC_SERVER_PASSWORD=root --user swag --privileged -d
 #to run vnc: open vnc://192.168.99.100:5900
 #to open testhtml via chrome: cd testapp && google-chrome ./index.html

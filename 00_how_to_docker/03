@@ -1,7 +1,1 @@
-#docker-machine env Char  //to list environment vars
-
 eval $(docker-machine env Char)
-
-#docker will tell you in the examples how to get environmetns commands for vm
-# Run this command to configure your shell:
-# eval $(docker-machine env Char)
